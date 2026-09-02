@@ -39,5 +39,5 @@ jobs:
           TAG: ${{ inputs.tag }}
         run: |
           cosign verify "${IMAGE}:${TAG}" \
-            --certificate-identity-regexp "https://github.com/abdoubeny/secure-python-pipeline/.github/workflows/release.yml@.*" \
+            --certificate-identity-regexp "https://github.com/AbdouBeny/secure-python-pipeline/.github/workflows/release.yml@.*" \
             --certificate-oidc-issuer "https://token.actions.githubusercontent.com"
