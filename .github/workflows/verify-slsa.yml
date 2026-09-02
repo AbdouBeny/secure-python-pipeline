@@ -32,7 +32,7 @@ jobs:
           IMAGE: ${{ env.IMAGE }}
           TAG: ${{ inputs.tag }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh attestation verify "oci://${IMAGE}:${TAG}"
+        run: gh attestation verify "oci://${IMAGE}:${TAG}" --owner abdoubeny
       - name: Verify sign cosign 
         env:
           IMAGE: ${{ env.IMAGE }}
