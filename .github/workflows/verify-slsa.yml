@@ -1,0 +1,43 @@
+name: Verify signed-releases
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag: 
+        description: "IMAGE TO TAG VERIFY.."
+        required: true
+        default: "latest"
+
+permissions: {}
+
+jobs:
+  Verify:
+    name: Verify provenance and sign 
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10 
+    permissions:
+      contents: read
+      packages: read
+    env:
+      IMAGE: ghcr.io/abdoubeny/secure-python-pipeline
+    steps:
+      - name: Harden runner
+        uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2.21.0
+        with:
+          egress-policy: audit
+      - name: Install cosign
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+      - name: Verify provenance
+        env:
+          IMAGE: ${{ env.IMAGE }}
+          TAG: ${{ inputs.tag }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh attestation verify "oci://${IMAGE}:${TAG}"
+      - name: Verify sign cosign 
+        env:
+          IMAGE: ${{ env.IMAGE }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          cosign verify "${IMAGE}:${TAG}" \
+            --certificate-identity-regexp "https://github.com/abdoubeny/secure-python-pipeline/.github/workflows/release.yml@.*" \
+            --certificate-oidc-issuer "https://token.actions.githubusercontent.com"
