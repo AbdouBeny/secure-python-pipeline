@@ -66,6 +66,8 @@ jobs:
           format: cyclonedx-json
           output-file: sbom.cdx.json
           upload-release-assets: false
+          registry-username: ${{ github.actor }}
+          registry-password: ${{ secrets.GITHUB_TOKEN }}
       - name: Attest SBOM 
         uses: actions/attest-sbom@c604332985a26aa8cf1bdc465b92731239ec6b9e # v4.1.0
         with:
@@ -86,6 +88,6 @@ jobs:
           TAG: ${{ github.event.release.tag_name }}
           BUNDLE: ${{ steps.attest.outputs.bundle-path }}
         run: |
-          cp "$BUNDLE" provennace.intoto.jsonl
-          gh release upload "$TAG" provennace.intoto.jsonl
+          cp "$BUNDLE" provenance.intoto.jsonl
+          gh release upload "$TAG" provenance.intoto.jsonl --clobber
       
