@@ -60,7 +60,9 @@ jobs:
         run: |
           pip install --require-hashes -r requirements.txt
           pip install --require-hashes -r requirements-test.txt
-      - name: Run pytest 
+      - name: Run pytest
+        env:
+          PYTHONPATH: src
         run: pytest -q 
 
   sast:
@@ -115,7 +117,7 @@ jobs:
         with:
           scan-type: fs 
           scan-ref: requirements.txt
-          severity: HIGH, CRITICAL
+          severity: HIGH,CRITICAL
           ignore-unfixed: true
           exit-code: "1"
           scanners: vuln
@@ -146,7 +148,7 @@ jobs:
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           scan-type: image
-          severity: HIGH, CRITICAL
+          severity: HIGH,CRITICAL
           ignore-unfixed: true
           exit-code: "1"
           scanners: vuln
