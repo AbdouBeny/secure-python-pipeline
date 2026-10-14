@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # Stage 1 : builder - installe les dépendances vérifiées par hash dans un venv
-FROM python:3.12.14-slim-bookworm@sha256:0f5b26b9518d002b6173fd61daad821fa340635ebfec5bba471013f9ca114579 AS builder
+FROM python:3.14.8-slim-bookworm@sha256:48b13b003dda20b16f9442b8475aa05fe21bf6579a8c881db92ffb4d8fd20f83 AS builder
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
@@ -19,7 +19,7 @@ RUN pip install --no-cache-dir --require-hashes -r requirements.txt
 RUN pip uninstall -y setuptools wheel pip
 
 # Stage 2 : production - image minimale, utilisateur non-root
-FROM python:3.12.14-slim-bookworm@sha256:0f5b26b9518d002b6173fd61daad821fa340635ebfec5bba471013f9ca114579 AS production
+FROM python:3.14.8-slim-bookworm@sha256:48b13b003dda20b16f9442b8475aa05fe21bf6579a8c881db92ffb4d8fd20f83 AS production
 
 LABEL org.opencontainers.image.source="https://github.com/AbdouBeny/secure-python-pipeline"
 LABEL org.opencontainers.image.licenses="MIT"
